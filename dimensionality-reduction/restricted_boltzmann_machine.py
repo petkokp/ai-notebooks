@@ -1,5 +1,6 @@
 import torch
 
+
 class RestrictedBoltzmannMachine():
     def __init__(self, visible_dim, hidden_dim, gaussian_hidden_distribution=False):
         self.visible_dim = visible_dim
@@ -30,4 +31,11 @@ class RestrictedBoltzmannMachine():
     def update_weights(self, v0, vk, ph0, phk, lr, momentum_coef, weight_decay, batch_size):
         self.W_momentum *= momentum_coef
         self.W_momentum += torch.mm(v0.t(), ph0) - torch.mm(vk.t(), phk)
-        self.h
+        self.h_bias_momentum *= momentum_coef
+        self.h_bias_momentum += torch.sum((ph0 - phk), 0)
+        self.v_bias_momentum *= momentum_coef
+        self.v_bias_momentum += torch.sum((v0 - vk), 0)
+        self.W += lr * self.W_momentum/batch_size
+        self.h_bias += lr * self.h_bias_momentum / batch_size
+        self.v_bias += lr * self.v_bias_momentum / batch_size
+        self.W -= self.W * weight_decay
