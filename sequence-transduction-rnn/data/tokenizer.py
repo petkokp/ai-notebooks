@@ -90,50 +90,7 @@ class SpecialTokens:
     def phi_token(self):
         return self._phi[0]
 
-class ITokenizer(ABC):
-
-    @abstractmethod
-    def ids2tokens(self):
-        pass
-
-    @abstractmethod
-    def tokens2ids(self):
-        pass
-
-    @abstractmethod
-    def set_tokenizer(self):
-        pass
-
-    @abstractmethod
-    def save_tokenizer(self):
-        pass
-
-    @abstractmethod
-    def load_tokenizer(self):
-        pass
-
-    @abstractmethod
-    def add_token(self):
-        pass
-
-    @abstractmethod
-    def preprocess_tokens(self):
-        pass
-
-    @abstractmethod
-    def batch_tokenizer(self):
-        pass
-
-    @abstractproperty
-    def vocab_size(self):
-        pass
-
-    @abstractmethod
-    def get_tokens(self):
-        pass
-
-
-class BaseTokenizer(ITokenizer):
+class BaseTokenizer():
     _oov_key = 'oov'
     _sos_key = 'sos'
     _eos_key = 'eos'
@@ -159,31 +116,31 @@ class BaseTokenizer(ITokenizer):
         return token_id
 
     @check_token(OOV)
-    def add_oov_token(self, token=OOV) -> ITokenizer:
+    def add_oov_token(self, token=OOV):
         token_id = self.add_token(token)
         self.special_tokens._oov = (token, token_id)
         return self
 
     @check_token(PAD)
-    def add_pad_token(self, token=PAD) -> ITokenizer:
+    def add_pad_token(self, token=PAD):
         token_id = self.add_token(token)
         self.special_tokens._pad = (token, token_id)
         return self
 
     @check_token(SOS)
-    def add_sos_token(self, token=SOS) -> ITokenizer:
+    def add_sos_token(self, token=SOS):
         token_id = self.add_token(token)
         self.special_tokens._sos = (token, token_id)
         return self
 
     @check_token(EOS)
-    def add_eos_token(self, token=EOS) -> ITokenizer:
+    def add_eos_token(self, token=EOS):
         token_id = self.add_token(token)
         self.special_tokens._eos = (token, token_id)
         return self
 
     @check_token(PHI)
-    def add_phi_token(self, token=PHI) -> ITokenizer:
+    def add_phi_token(self, token=PHI):
         token_id = self.add_token(token)
         self.special_tokens._phi = (token, token_id)
         return self
@@ -225,14 +182,14 @@ class BaseTokenizer(ITokenizer):
             tokenizer_path: Union[str, PathLike],
             *args,
             **kwargs
-            ) -> ITokenizer:
+            ):
         data = JSONLoader(tokenizer_path).load()
         self._token_to_id = data[self._token_to_id_key]
         self.__set_special_tokens_dict(data[self._special_tokens_key])
         self._reset_id_to_token()
         return self
 
-    def set_tokenizer(self, data: List[str], *args, **kwargs) -> ITokenizer:
+    def set_tokenizer(self, data: List[str], *args, **kwargs):
         all_tokens = self.get_tokens(data)
         _ = list(map(self.add_token, all_tokens))
         self._reset_id_to_token()
