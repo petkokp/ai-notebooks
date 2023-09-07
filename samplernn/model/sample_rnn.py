@@ -1,8 +1,7 @@
 import torch
 import numpy as np
-from sample_level_mlp import SampleLevelMLP
-from frame_level_rnn import FrameLevelRNN
-
+from model.frame_level_rnn import FrameLevelRNN
+from model.sample_level_mlp import SampleLevelMLP
 
 class SampleRNN(torch.nn.Module):
 

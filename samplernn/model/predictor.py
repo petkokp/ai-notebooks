@@ -1,6 +1,6 @@
 import torch
-from utilities import linear_dequantize
-from runner import Runner
+from model.utilities import linear_dequantize
+from model.runner import Runner
 
 
 class Predictor(Runner, torch.nn.Module):
