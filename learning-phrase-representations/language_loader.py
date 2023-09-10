@@ -3,6 +3,18 @@ import numpy as np
 import torch
 import pickle
 
+def read_data(filename):
+    lines = []
+    with open(filename, 'r') as fp:
+        i = 0
+        for line in fp:
+            if i % 100 == 0:
+                line = line.lower().replace("'", " ").replace(".", "").replace("?", "")\
+                    .replace("!", "").replace(":", "").replace(";", "")
+                lines.append(line)
+            i += 1
+    fp.close()
+    return lines
 
 class LanguageLoader(object):
     def __init__(self, input_path, output_path, vocab_size, max_length):
@@ -35,23 +47,10 @@ class LanguageLoader(object):
         self.input_vecs, self.output_vecs = self.filter(
             self.input_vecs, self.output_vecs)
 
-    def read_data(filename):
-        lines = []
-        with open(filename, 'r') as fp:
-            i = 0
-            for line in fp:
-                if i % 100 == 0:
-                    line = line.lower().replace("'", " ").replace(".", "").replace("?", "")\
-                        .replace("!", "").replace(":", "").replace(";", "")
-                    lines.append(line)
-                i += 1
-        fp.close()
-        return lines
-
     def init_language(self, path):
         dictionary = ["<SOS>", "<EOS>", "<UNK>"]
 
-        corpus = self.read_data(path)
+        corpus = read_data(path)
         words = " ".join(corpus).split()
         mc = Counter(words).most_common(self.vocab_size-3)
         dictionary.extend([word for word, _ in mc])

@@ -1,5 +1,5 @@
-from encoder import Encoder
-from decoder import Decoder
+from model.encoder import Encoder
+from model.decoder import Decoder
 
 import torch.nn as nn
 import torch.optim as optim
