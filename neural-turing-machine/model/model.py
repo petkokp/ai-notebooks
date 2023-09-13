@@ -1,9 +1,9 @@
 import torch
 from torch import nn
-from neural_turing_machine import NTM
-from controller import LSTMController
-from head import NTMReadHead, NTMWriteHead
-from memory import NTMMemory
+from .neural_turing_machine import NTM
+from .controller import LSTMController
+from .head import NTMReadHead, NTMWriteHead
+from .memory import NTMMemory
 
 
 class EncapsulatedNTM(nn.Module):
