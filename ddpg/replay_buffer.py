@@ -14,7 +14,7 @@ class ReplayBuffer:
 
     def push(self, state, action, reward, next_state, done):
         index = self.total_count % self.capacity
-        self.state_memory[index] = state
+        self.state_memory[index] = state[0]
         self.action_memory[index] = action
         self.reward_memory[index] = reward
         self.new_state_memory[index] = next_state

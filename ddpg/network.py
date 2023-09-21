@@ -49,7 +49,10 @@ class ActorNetwork(nn.Module):
             pathlib.Path(ckpt_dir).mkdir(parents=True, exist_ok=True)
 
     def forward(self, state):
+        if len(state.shape) == 1:
+            state = state.unsqueeze(0)
         x = self.fc1(state)
+        
         x = self.bn1(x)
         x = F.relu(x)
         x = self.fc2(x)

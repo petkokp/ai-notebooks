@@ -34,12 +34,10 @@ class Agent:
 
     def choose_action(self, observation):
         self.actor.eval()
-        observation = T.tensor(
-            observation, dtype=T.float).to(self.actor.device)
+        observation = T.tensor(observation, dtype=T.float).to(self.actor.device)
         mu = self.actor(observation).to(self.actor.device)
-        mu_w_noise = mu + T.tensor(self.noise(),
-                                   dtype=T.float).to(self.actor.device)
-        self.actor.train()
+        mu_w_noise = mu + T.tensor(self.noise(), dtype=T.float).to(self.actor.device)
+        
         return mu_w_noise.cpu().detach().numpy()
 
     def learn(self):
