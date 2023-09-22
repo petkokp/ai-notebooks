@@ -1,5 +1,5 @@
 import gymnasium as gym
-from .atari_wrappers import make_atari
+from atari_wrappers import make_atari
 import time
 
 
@@ -29,7 +29,7 @@ class Evaluator:
 
             while not done:
                 action, *_ = self.agent.get_actions_and_values(state)
-                nex_state, r, done, info = self.env.step(action[0])
+                nex_state, r, done, _, info = self.env.step(action[0])
                 episode_reward += r
                 state = nex_state
                 if done:

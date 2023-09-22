@@ -1,4 +1,4 @@
-from .atari_wrappers import make_atari
+from atari_wrappers import make_atari
 from multiprocessing import Process
 
 
@@ -21,7 +21,7 @@ class Worker(Process):
         while True:
             self.conn.send(state)
             action = self.conn.recv()
-            next_state, reward, done, info = self.env.step(action)
+            next_state, reward, done, _, info = self.env.step(action)
             self.conn.send((next_state, reward, done, info))
             state = next_state
             if done:

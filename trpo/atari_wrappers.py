@@ -12,8 +12,7 @@ def make_atari(env_name: str,
                ):
     env = gym.make(env_name, render_mode=render_mode)
     if "NoFrameskip" not in env.spec.id:
-        raise ValueError(
-            f"env should be from `NoFrameskip` type got: {env_name}")
+        raise ValueError(f"env should be from `NoFrameskip` type got: {env_name}")
     env = NoopResetEnv(env)
     env = MaxAndSkipEnv(env)
     if episodic_life:
@@ -37,13 +36,13 @@ class NoopResetEnv(gym.Wrapper):
         self.noop_action = 0
         assert env.unwrapped.get_action_meanings()[0] == 'NOOP'
 
-    def reset(self):
+    def reset(self, **kwargs):
         self.env.reset()
 
         noops = np.random.randint(1, self.noop_max + 1)
         obs = None
         for _ in range(noops):
-            obs, _, done, _ = self.env.step(self.noop_action)
+            obs, _, _, done, _ = self.env.step(self.noop_action)
             if done:
                 obs = self.env.reset()
         return obs
@@ -62,7 +61,7 @@ class MaxAndSkipEnv(gym.Wrapper):
         done = None
         info = None
         for i in range(self.skip):
-            obs, r, done, info = self.env.step(action)
+            obs, r, done, _, info = self.env.step(action)
 
             if i == self.skip - 2:
                 self.obs_buffer[0] = obs
@@ -94,7 +93,7 @@ class EpisodicLifeEnv(gym.Wrapper):
         self.lives = lives
         return obs, reward, done, info
 
-    def reset(self):
+    def reset(self, **kwargs):
 
         if self.real_done:
             obs = self.env.reset()
@@ -110,7 +109,7 @@ class FireResetEnv(gym.Wrapper):
         assert env.unwrapped.get_action_meanings()[1] == 'FIRE'
         assert len(env.unwrapped.get_action_meanings()) >= 3
 
-    def reset(self):
+    def reset(self, **kwargs):
         self.env.reset()
         obs, _, done, _ = self.env.step(1)
         if done:
@@ -135,8 +134,7 @@ class ResizedAndGrayscaleEnv(gym.ObservationWrapper, ABC):
 
     def observation(self, observation):
         frame = cv2.cvtColor(observation, cv2.COLOR_RGB2GRAY)
-        frame = cv2.resize(frame, (self.width, self.height),
-                           interpolation=cv2.INTER_AREA)
+        frame = cv2.resize(frame, (self.width, self.height), interpolation=cv2.INTER_AREA)
         return frame
 
 
