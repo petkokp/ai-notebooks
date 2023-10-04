@@ -4,7 +4,7 @@ import numpy as np
 class OmniglotNShotDataset():
     def __init__(self, batch_size, classes_per_set=20, samples_per_class=1, seed=2017, shuffle=True, use_cache=True):
         np.random.seed(seed)
-        self.x = np.load('data/data.npy')
+        self.x = np.load('./data/data.npy')
         self.x = np.reshape(self.x, newshape=(
             self.x.shape[0], self.x.shape[1], 28, 28, 1))
         if shuffle:
