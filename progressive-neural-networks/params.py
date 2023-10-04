@@ -17,8 +17,8 @@ class Parameters:
         self.interval = 500
         self.max_actions = 100
         self.discount = 0.95
-        self.log_path = self.cwd / "tensorboard" / "pnn"
-        self.save_path = self.cwd / "trained_models"
+        self.log_path = self.cwd / "./tensorboard" / "pnn"
+        self.save_path = self.cwd / "./trained_models"
         self.load = False
         self.render = False
         self.seed = 1
